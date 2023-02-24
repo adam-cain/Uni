@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 //
 // Note: You are allowed to add additional methods if you need.
 // Coded by Prudence Wong 2021-03-06
@@ -12,13 +14,11 @@
 // d denotes number of distinct requests
 // You can use any of the above notations or define additional notation as you wish.
 // 
-// appendIfMiss(): O(nf) This is due to a main for loop that loops through every request. Then a nested while loop that
-// cycles through all the nodes in the cabinet.
+// appendIfMiss():
 // 	
-// moveToFront(): O(nf) Same as above
+// moveToFront():
 // 	
-// freqCount(): O(nf) Same as above. Although there is nested loop in the while, due to conditional executions in the 
-// inner while loop it still stands
+// freqCount():
 // 
 
 class COMP108A2Cab {
@@ -79,7 +79,8 @@ class COMP108A2Cab {
 					output.compare[i] = count;
 					if(currentNode != head){
 						insertHead(new COMP108A2Node(rArray[i]));
-						deleteNode(currentNode);
+						currentNode.next.prev = currentNode.prev;
+						currentNode.prev.next = currentNode.next;
 					}
 					hit = true;
 					break;
@@ -101,7 +102,7 @@ class COMP108A2Cab {
 	// move the file requested so that order is by non-increasing frequency
 	public COMP108A2Output freqCount(int rArray[], int rSize) {
 		COMP108A2Output output = new COMP108A2Output(rSize, 1);
-		System.out.println("\n");
+		
 		COMP108A2Node currentNode;
 		boolean hit;
 		int count;
@@ -117,15 +118,29 @@ class COMP108A2Cab {
 					output.compare[i] = count;
 					hit = true;
 					if(currentNode != head){
-						COMP108A2Node iterNode = currentNode;
-						while (iterNode.prev!=null &&iterNode.prev.freq < iterNode.freq){
-							int tempData = iterNode.prev.data;
-							int tempFreq = iterNode.prev.freq;
-							iterNode.prev.data = iterNode.data;
-							iterNode.prev.freq = iterNode.freq;
-							iterNode.data = tempData;
-							iterNode.freq = tempFreq;
-							iterNode = iterNode.prev;
+						
+						COMP108A2Node tempNode = currentNode.prev;
+						COMP108A2Node highestFreqNode = null;
+						
+						do{
+							if(currentNode.freq > tempNode.freq){
+								highestFreqNode = tempNode;
+							}
+							tempNode = tempNode.prev;
+						}while(tempNode!= null);
+						if(highestFreqNode != null){
+							System.out.println("Rearraging");
+							//delete the node
+							currentNode.next.prev = currentNode.prev;
+							currentNode.prev.next = currentNode.next;
+							//insert new node at place before
+							currentNode.next = highestFreqNode;
+							currentNode.prev = highestFreqNode.prev;
+							
+							if(highestFreqNode.prev != null){
+							highestFreqNode.prev.next = currentNode;
+							}
+							highestFreqNode.prev = currentNode;
 						}
 					}
 					break;
@@ -133,10 +148,12 @@ class COMP108A2Cab {
 				currentNode = currentNode.next;
 			}while(currentNode != null);
 			if(!hit){
+				System.out.println("Insert new: " + rArray[i]);
 				insertTail(new COMP108A2Node(rArray[i]));
 				output.missCount++;
 				output.compare[i] = count;
 			}
+			System.out.println(headToTail());
 		}
 
 		output.cabFromHead = headToTail();
@@ -145,10 +162,29 @@ class COMP108A2Cab {
 		return output;		
 	}
 
-	public void deleteNode(COMP108A2Node node){
-		if(node.prev != null){node.prev.next = node.next;}
-		if(node.next != null){node.next.prev = node.prev;}
-	}
+	// private void sortByFreq(COMP108A2Node currentNode){
+	// 	System.out.println("Sorting: "+currentNode.data);
+	// 	COMP108A2Node currentNode = currentNode.prev;
+	// 	COMP108A2Node highestFreqNode = null;
+		
+	// 	do{
+	// 		if(currentNode.freq > currentNode.freq){
+	// 			highestFreqNode = currentNode;
+	// 		}
+	// 		currentNode = currentNode.prev;
+	// 	}while(currentNode!= null);
+	// 	if(highestFreqNode == null){return;}
+		
+	// 	System.out.println("Rearraging");
+	// 	currentNode = highestFreqNode;
+	// 	System.out.println(currentNode);
+	// 	highestFreqNode.next = currentNode.next;
+	// 	highestFreqNode.prev = currentNode.prev;
+	// 	currentNode.next = currentNode.next;
+	// 	currentNode.prev = currentNode.prev;
+	// 	System.out.println(headToTail());
+	// 	return;
+	// }
 
 	// DO NOT change this method
 	// insert newNode to head of list
