@@ -1,7 +1,9 @@
 #include <stdio.h>
 
 int main() {
+    // Initialization
     int a, b, n, remainder, quotient;
+    // Inputs
     scanf("%d %d %d", &a, &b, &n);
 
     // Perform integer division to get the quotient and remainder

@@ -6,14 +6,13 @@
 
 int main() {
     // Initialization
-    int englishCount=0, digitCount=0, spaceCount=0, otherCount=0;
-    
-    // Input
-    // Char array set to buffer size to prevent buffer overflow
     char str[BUFFER_SIZE];
-    // 
-    fgets(str, sizeof(str), stdin);
+    int englishCount=0, digitCount=0, spaceCount=0, otherCount=0;
 
+    // Input
+    // Using fgets to include whitespaces when reading
+    fgets(str, sizeof(str), stdin);
+    
     // Loop through each character in str until reaches null character
     for(int i = 0; str[i]!='\0'; i++){
         // Check if character is upper or lower case character
