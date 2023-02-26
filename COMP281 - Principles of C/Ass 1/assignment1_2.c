@@ -11,6 +11,7 @@ int main() {
     // Input
     // Char array set to buffer size to prevent buffer overflow
     char str[BUFFER_SIZE];
+    // 
     fgets(str, sizeof(str), stdin);
 
     // Loop through each character in str until reaches null character

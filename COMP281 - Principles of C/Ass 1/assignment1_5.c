@@ -1,12 +1,13 @@
 #include <stdio.h>
 
 int main() {
-    int num;
-    while (scanf("%d", &num) != EOF){
-        // convert integer to character and print it
-        printf("%c", (char) num);
-    }
-    // printf("Press ENTER key to Continue\n");  
-    // getchar(); 
+    // Initialization
+    int currentNumber;
+    
+    // Loop through and scan each decimal integer until it reaches the end of file
+    while(scanf("%d", &currentNumber) != EOF){
+        // Convert integer to character and print to line
+        printf("%c", (char) currentNumber);
+    } 
     return 0;
 }
