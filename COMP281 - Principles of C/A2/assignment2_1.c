@@ -17,9 +17,10 @@ int main()
     char type; 
     scanf("%c",type);
     if(type == 'C'){
-        printf("Compress");
+        printf("%s","Compress");
         compress();
     }else if(type == 'E'){
+        //printf()
         expand();
     }
     return 0;
