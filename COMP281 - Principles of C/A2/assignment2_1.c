@@ -1,34 +1,52 @@
 #include <stdio.h>
 
-#define BUFFER_SIZE;
-
-void output(char character, int count){
-    
-    printf("%c%c%c%d*", character, character, character, count);
+void output(char character, int count)
+{
+    if (count >= 3)
+    {
+        printf("%c%c%c%d*", character, character, character, count);
+    }
+    else
+    {
+        for (int i = 0; i < count; i++)
+        {
+            printf("%c", character);
+        }
+    }
 }
 
 void compress()
 {
-    int c, count = 0;
-    const char EOL = '\n';
-    char prevChar;
-    while ((c = getchar()) != EOF)
+    int count = 1;
+    char prevChar, currentChar;
+    int startFlag = 0;
+    while ((currentChar = getchar()) != EOF)
     {
-        printf("%c",c);
-        // if(c = EOL){
-        //     if(count >= 3){
-        //         printRepeats(prevChar,count);
-        //     }else{
-        //         printf("%c",prevChar);
-        //     }
-        //     count = 0;
-        // }else if(prevChar == c){
-        //     count++;
-        // }
-        // else{
-
-        // }
+        if (currentChar == '\n')
+        {
+            output(prevChar, count);
+            count = 1;
+        }
+        else if (prevChar == currentChar)
+        {
+            count++;
+        }
+        else
+        {
+            if (startFlag == 1)
+            {
+                output(prevChar, count);
+            }
+            else
+            {
+                printf("(%i-%i)",prevChar,currentChar);
+                startFlag = 1;
+            }
+            count = 1;
+        }
+        prevChar = currentChar;
     }
+    output(prevChar, count);
 }
 
 void expand()
@@ -37,11 +55,18 @@ void expand()
 
 int main()
 {
-    int c = getchar();
-    if (c == 'C') {
+    printf("HHHH");
+    char* c;
+    scanf("%s",c);
+    printf("Test");
+    if (c[0] == 'C')
+    {
+        printf("comp");
         compress();
-    } else if (c == 'E') {
-        decompress();
+    }
+    else if (c[0] == 'E')
+    {
+        expand();
     }
     return 0;
 }
