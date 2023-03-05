@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 void output(char character, int count)
 {
@@ -39,7 +41,6 @@ void compress()
             }
             else
             {
-                printf("(%i-%i)",prevChar,currentChar);
                 startFlag = 1;
             }
             count = 1;
@@ -49,22 +50,59 @@ void compress()
     output(prevChar, count);
 }
 
+#define MAX_LINE_LENGTH 1000
+
 void expand()
 {
+    char input[MAX_LINE_LENGTH];
+
+    while (fgets(input, MAX_LINE_LENGTH, stdin))
+    {
+        int lastEncoded = 0;
+        for (int i = 0; i < strlen(input); i++)
+        {
+            if (input[i] == '*' && input[i-1] >= '0' && input[i-1] <= '9')
+            {
+                int numberIndex = i - 1;
+                int decimalPlace = 1;
+                int number = 0;
+                do
+                {
+                    number += (input[numberIndex]-'0') * decimalPlace;
+                    decimalPlace *= 10;
+                    numberIndex--;
+                } while (input[numberIndex] >= '0' && input[numberIndex] <= '9');
+                //printf("(%c*%i)",input[numberIndex],number);
+                for (int j = lastEncoded; j < numberIndex-2; j++)
+                {
+                    printf("%c",input[j]);
+                }
+                for (int z = 0; z < number; z++)
+                {
+                    printf("%c",input[numberIndex]);
+                }
+                lastEncoded = i + 1;
+            }
+            if(i == strlen(input)-1){
+                for (int j = lastEncoded; j < strlen(input)-1; j++)
+                {
+                    printf("%c",input[j]);
+                }
+            }
+        }
+        printf("\n");
+    }
 }
 
 int main()
 {
-    printf("HHHH");
-    char* c;
-    scanf("%s",c);
-    printf("Test");
-    if (c[0] == 'C')
+    char option;
+    scanf("%c\n", &option);
+    if (option == 'C')
     {
-        printf("comp");
         compress();
     }
-    else if (c[0] == 'E')
+    else if (option == 'E')
     {
         expand();
     }
