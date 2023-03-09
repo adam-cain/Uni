@@ -4,15 +4,18 @@
 
 void output(char character, int count)
 {
-    if (count >= 3)
+    if (character != 0)
     {
-        printf("%c%c%c%d*", character, character, character, count);
-    }
-    else
-    {
-        for (int i = 0; i < count; i++)
+        if (count >= 3)
         {
-            printf("%c", character);
+            printf("%c%c%c%d*", character, character, character, count);
+        }
+        else
+        {
+            for (int i = 0; i < count; i++)
+            {
+                printf("%c", character);
+            }
         }
     }
 }
@@ -21,7 +24,7 @@ void compress()
 {
     int count = 1;
     char prevChar, currentChar;
-    int startFlag = 0;
+    getchar();
     while ((currentChar = getchar()) != EOF)
     {
         if (currentChar == '\n')
@@ -35,14 +38,7 @@ void compress()
         }
         else
         {
-            if (startFlag == 1)
-            {
-                output(prevChar, count);
-            }
-            else
-            {
-                startFlag = 1;
-            }
+            output(prevChar, count);
             count = 1;
         }
         prevChar = currentChar;
@@ -50,44 +46,49 @@ void compress()
     output(prevChar, count);
 }
 
-#define MAX_LINE_LENGTH 1000
+#define MAX_LINE_LENGTH 100
+
+void printBetween(int startIndex, int endIndex, char *input)
+{
+    for (int i = startIndex; i < endIndex; i++)
+    {
+        printf("%c", input[i]);
+    }
+}
 
 void expand()
 {
     char input[MAX_LINE_LENGTH];
-
+    fgets(input, MAX_LINE_LENGTH, stdin);
     while (fgets(input, MAX_LINE_LENGTH, stdin))
     {
         int lastEncoded = 0;
         for (int i = 0; i < strlen(input); i++)
         {
-            if (input[i] == '*' && input[i-1] >= '0' && input[i-1] <= '9')
+            int index = i - 1;
+            if (input[i] == '*' && (input[index] >= '0' && input[index] <= '9'))
             {
-                int numberIndex = i - 1;
-                int decimalPlace = 1;
-                int number = 0;
-                do
+                int number = input[index] - '0';
+                if (index != 0 && (input[index - 1] >= '1' && input[index - 1] <= '9'))
                 {
-                    number += (input[numberIndex]-'0') * decimalPlace;
-                    decimalPlace *= 10;
-                    numberIndex--;
-                } while (input[numberIndex] >= '0' && input[numberIndex] <= '9');
-                //printf("(%c*%i)",input[numberIndex],number);
-                for (int j = lastEncoded; j < numberIndex-2; j++)
-                {
-                    printf("%c",input[j]);
+                    index--;
+                    number += (input[index] - '0') * 10;
                 }
-                for (int z = 0; z < number; z++)
+                index--;
+                if (input[index] == input[index - 1] && input[index - 1] == input[index - 2])
                 {
-                    printf("%c",input[numberIndex]);
+                    printBetween(lastEncoded, index - 2, input);
+                    for (int z = 0; z < number; z++)
+                    {
+                        printf("%c", input[index]);
+                    }
+                    lastEncoded = i + 1;
                 }
-                lastEncoded = i + 1;
             }
-            if(i == strlen(input)-1){
-                for (int j = lastEncoded; j < strlen(input)-1; j++)
-                {
-                    printf("%c",input[j]);
-                }
+            if (i == strlen(input) - 1)
+            {
+                
+                printBetween(lastEncoded, strlen(input) - 1, input);
             }
         }
         printf("\n");
@@ -97,10 +98,11 @@ void expand()
 int main()
 {
     char option;
-    scanf("%c\n", &option);
+    scanf("%c", &option);
     if (option == 'C')
     {
         compress();
+        printf("\n");
     }
     else if (option == 'E')
     {
