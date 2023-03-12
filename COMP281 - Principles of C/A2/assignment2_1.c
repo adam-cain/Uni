@@ -56,6 +56,10 @@ void printBetween(int startIndex, int endIndex, char *input)
     }
 }
 
+int charToInt(char character){
+    return character - '0';
+}
+
 void expand()
 {
     char input[MAX_LINE_LENGTH];
@@ -68,14 +72,14 @@ void expand()
             int index = i - 1;
             if (input[i] == '*' && (input[index] >= '0' && input[index] <= '9'))
             {
-                int number = input[index] - '0';
+                int number = charToInt(input[index]);
                 if (index != 0 && (input[index - 1] >= '1' && input[index - 1] <= '9'))
                 {
                     index--;
-                    number += (input[index] - '0') * 10;
+                    number += charToInt(input[index]) * 10;
                 }
                 index--;
-                if (input[index] == input[index - 1] && input[index - 1] == input[index - 2])
+                if (index-2 >= 0 && input[index] == input[index - 1] && input[index - 1] == input[index - 2])
                 {
                     printBetween(lastEncoded, index - 2, input);
                     for (int z = 0; z < number; z++)
@@ -87,11 +91,9 @@ void expand()
             }
             if (i == strlen(input) - 1)
             {
-                
-                printBetween(lastEncoded, strlen(input) - 1, input);
+                printBetween(lastEncoded, strlen(input), input);
             }
         }
-        printf("\n");
     }
 }
 

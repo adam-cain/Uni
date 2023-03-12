@@ -1,84 +1,98 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
-#include <ctype.h>
+#include <stdlib.h>
 
 #define MAX_LINE_LENGTH 100
-#define MAX_WORD_LENGTH 30
-#define INITIAL_CAPACITY 100
+#define MAX_WORD_LENGTH 20
 
-typedef struct {
+typedef struct
+{
     char *word;
     int count;
 } Word;
 
-typedef struct {
+typedef struct
+{
     Word *words;
-    int capacity;
     int size;
 } WordList;
 
-void addWord(WordList *list, const char *word) {
-    for (int i = 0; i < list->size; i++) {
-        if (strcmp(list->words[i].word, word) == 0) {
+void addWord(WordList *list, char *word)
+{
+    // search for the word in the list
+    for (int i = 0; i < list->size; i++)
+    {
+        if (strcmp(list->words[i].word, word) == 0)
+        {
+            // word already exists, increment count and return
             list->words[i].count++;
             return;
         }
     }
-    if (list->size == list->capacity) {
-        list->capacity *= 2;
-        list->words = realloc(list->words, list->capacity * sizeof(Word));
-    }
+
+    // Allocate more memory for an extra word
+    list->words = realloc(list->words, (list->size + 1) * sizeof(Word));
+
+    // word doesn't exist, add it to the list
     list->words[list->size].word = strdup(word);
     list->words[list->size].count = 1;
     list->size++;
 }
 
-// void sortWords(WordList *list) {
-//     qsort(list->words, list->size, sizeof(Word), compareWords);
-// }
+void printWords(const WordList *list)
+{
+    for (int i = 0; i < list->size; i++)
+    {
+        printf("%s => %d", list->words[i].word, list->words[i].count);
+        if (i != list->size - 1)
+        {
+            printf("\n");
+        }
+    }
+}
 
-int compareWords(const void *a, const void *b) {
-    const Word *wordA = (const Word *) a;
-    const Word *wordB = (const Word *) b;
+int compareWords(const void *a, const void *b)
+{
+    Word *wordA = (Word *)a;
+    Word *wordB = (Word *)b;
     return strcmp(wordA->word, wordB->word);
 }
 
-void printWords(const WordList *list) {
-    for (int i = 0; i < list->size; i++) {
-        printf("%s => %d\n", list->words[i].word, list->words[i].count);
-    }
+void sortWords(WordList *list)
+{
+    qsort(list->words, list->size, sizeof(Word), compareWords);
 }
 
-void freeWords(WordList *list) {
-    for (int i = 0; i < list->size; i++) {
-        free(list->words[i].word);
-    }
-    free(list->words);
-}
-
-int main() {
-    WordList list = { NULL, INITIAL_CAPACITY, 0 };
-    char line[MAX_LINE_LENGTH + 1];
-    while (fgets(line, sizeof(line), stdin)) {
-        char *word = strtok(line, " ,.\n");
-        while (word != NULL) {
-            char *cleanWord = malloc(MAX_WORD_LENGTH + 1);
-            int len = strlen(word);
-            int cleanLen = 0;
-            for (int i = 0; i < len; i++) {
-                if (isalpha(word[i])) {
-                    cleanWord[cleanLen++] = tolower(word[i]);
+int main()
+{
+    WordList list = {NULL, 0};
+    char line[MAX_LINE_LENGTH];
+    char word[MAX_WORD_LENGTH] = "";
+    while (fgets(line, MAX_LINE_LENGTH, stdin) != NULL)
+    {
+        for (int i = 0; i < strlen(line); i++)
+        {
+            if (line[i] >= 'A' && line[i] <= 'Z')
+            {
+                line[i] = line[i] + 32;
+            }
+            if (line[i] >= 'a' && line[i] <= 'z')
+            {
+                int len = strlen(word);
+                *(word + len) = line[i];
+                *(word + len + 1) = '\0';
+            }
+            else
+            {
+                if (strlen(word) != 0 && line[i] != '-' && line[i] != '\'')
+                {
+                    addWord(&list, word);
+                    memset(word, 0, sizeof(word));
                 }
             }
-            cleanWord[cleanLen] = '\0';
-            addWord(&list, cleanWord);
-            free(cleanWord);
-            word = strtok(NULL, " ,.\n");
         }
     }
-    //sortWords(&list);
+    sortWords(&list);
     printWords(&list);
-    freeWords(&list);
     return 0;
 }
