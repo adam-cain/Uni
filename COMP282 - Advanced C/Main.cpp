@@ -17,7 +17,7 @@ void checkFirst() {
 }
 void checkSecond() {
 	TuringMachineState t1(1,2,3,4,"->");
-	cout <<t1<<endl;
+	cout <<t1 << endl;
 	TuringMachineState t2(5,6,7,8,"<-");
 	cout <<t2<<endl;
 	cin >> t1;
@@ -58,7 +58,9 @@ void checkTuringMachine(TuringMachine* t) {
 	cout << (t->find(1,3)==NULL)<<endl;
 	vector<TuringMachineState> vec=*t->getAll();
 	sort(vec.begin(),vec.end(),compareState);
-	for (auto s: *t->getAll()) cout << s;
+	for (auto s: *t->getAll()){
+		cout << s;
+	}
 }
 void checkTape(TuringTape t) {
 	cout<<t.moveLeft();

@@ -1,5 +1,9 @@
 #ifndef TURINGTAPE_H_
 #define TURINGTAPE_H_
+
+#include <iostream>
+
+
 class TuringTape {
 public:
 	TuringTape(int n);
@@ -8,8 +12,14 @@ public:
 	int getContent();
 	void setContent(int c);
 	int getPosition();
+
 	friend std::ostream& operator<<(std::ostream& out,const TuringTape& s);
 
+private:
+    int* tape;
+    int n; 
+    int position; 
+	int highestPosition;
 };
 
 #endif /* TURINGTAPE_H_ */
