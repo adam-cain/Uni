@@ -4,10 +4,12 @@
 #include <vector>
 #include <sstream>
 #include <string>
+#include <limits>
 
 #include "TuringMachine.h"
 #include "DenseTuringMachine.h"
 #include "TuringTape.h"
+#include "SparseTuringMachine.h"
 
 using namespace std;
 
@@ -24,23 +26,27 @@ void displayMenu()
 
 int main()
 {
-    int tapeLength = 0;   // Tape length provided by user
-    string option;        // User input for menu option
+    int tapeLength = 0; // Tape length provided by user
+    string option;      // User input for menu option
+    int currentContent = 0, currentState = 0;
+    int 
+    maxState = std::numeric_limits<int>::max(), 
+    maxContent = std::numeric_limits<int>::max();
 
-    // Display initial message and wait for input of an int for tape length
     cout << "How long should the tape be?";
     cin >> tapeLength;
-    // cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Ignore rest of the input buffer
+    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Ignore rest of the input buffer
 
     // Create a Turing machine object
-    TuringMachine dtm;
+    TuringMachine tm;
+
     TuringTape tape(tapeLength);
     // Main menu loop
     while (true)
     {
         displayMenu();
         cin >> option;
-        // cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Ignore rest of the input buffer
+        cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Ignore rest of the input buffer
 
         if (option == "1")
         {
@@ -48,11 +54,11 @@ int main()
             cout << "What is the maximum state and what is the maximum content?";
             cin >> x;
             cin >> y;
-            dtm = DenseTuringMachine(x, y);
+            tm = DenseTuringMachine(x, y);
         }
         else if (option == "2")
         {
-            // TODO: Later Task
+            tm = SparseTuringMachine();
         }
         else if (option == "3")
         {
@@ -62,69 +68,65 @@ int main()
 
             std::istringstream iss(input);
 
-            int currentState, currentContent, nextState, nextContent;
+            int currState, currContent, nextState, nextContent;
             std::string direction;
 
-            if (iss >> currentState >> currentContent >> nextState >> nextContent >> direction)
+            if (iss >> currState >> currContent >> nextState >> nextContent >> direction)
             {
-                TuringMachineState state = TuringMachineState(currentState, currentContent, nextState, nextContent, direction);
-                dtm.add(state);
+                TuringMachineState state = TuringMachineState(currState, currContent, nextState, nextContent, direction);
+                tm.add(state);
             }
-        }else if (option == "4")
+        }
+        else if (option == "4")
         {
-            // TODO: Later Task
+            DenseTuringMachine dtm(tm.getAll(),maxState,maxContent);
+            dtm.densify();
         }
         else if (option == "5")
         {
             int steps;
             cout << "How many steps do you wish to execute?";
             cin >> steps;
-            
-        for (int i = 0; i < steps; ++i) {
 
-            int position = tape.getPosition();
-            if (position < 0 || position >= tapeLength) {
-                cout << "In step "<< steps <<", the position is "<< position <<", but that is outside the tape";
-                break;
+            for (int i = 0; i < steps; ++i)
+            {
+
+                int position = tape.getPosition();
+                if (position < 0 || position >= tapeLength)
+                {
+                    cout << "In step " << steps << ", the position is " << position << ", but that is outside the tape";
+                    break;
+                }
+
+                currentContent = tape.getContent();
+
+                TuringMachineState *state = tm.find(currentState, currentContent);
+
+                if (state == nullptr)
+                {
+                    cout << "In step" << steps << ", there is no Turing machine state with state " << currentState << " and content " << currentContent;
+                    break;
+                }
+
+                currentState = state->getNextState();
+                tape.setContent(state->getNextContent());
+                if(state->getMoveDirection() == "->"){
+                    tape.moveRight();
+                }else if(state->getMoveDirection() == "<-"){
+                    tape.moveLeft();
+                }
             }
-
-            
-
-            int state = tape.getPosition();
-            int content = tape.getContent();
-            
-            if(){
-                cout << "In step" << steps <<", there is no Turing machine state with state "<< state <<" and content "<< content;
-                break;
-            }
-
-            tape.moveRight();
-
-
-            // Display current state and content
-        }
-            
-
         }
         else if (option == "6")
         {
-            int maxState, maxContent, numSteps;
-            cout << "Enter the maximum state: ";
-            cin >> maxState;
-            cout << "Enter the maximum content: ";
-            cin >> maxContent;
-            cout << "How many steps do you wish to execute? ";
-            cin >> numSteps;
-            tm.outputCurrentInfo(maxState, maxContent, numSteps);
+            cout << "The current state is "<< currentState <<". The current content is "<< tape.getContent() <<". The current position is x" << endl;
+            cout << "The content of the tape is " << tape << endl;
+            cout << "The states of the Turing machine is " << tm.getAll();
         }
         else if (option == "Q" || option == "q")
         {
             cout << "Quitting..." << endl;
             break;
-        }
-        else
-        {
-            cout << "Invalid option. Please try again." << endl;
         }
     }
 

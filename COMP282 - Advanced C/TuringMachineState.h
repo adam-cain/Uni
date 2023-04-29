@@ -10,6 +10,9 @@ class TuringMachineState {
 public:
     TuringMachineState(int currentState, int currentContent, int nextState, int nextContent, const std::string& moveDirection);
 
+    void setCurrentState(int currentState);
+    void setCurrentContent(int currentContent);
+
     int getCurrentState();
     int getCurrentContent();
     int getNextState();

@@ -5,6 +5,14 @@
 TuringMachineState::TuringMachineState(int currentState, int currentContent, int nextState, int nextContent, const std::string& moveDirection)
     : currentState_(currentState), currentContent_(currentContent), nextState_(nextState), nextContent_(nextContent), moveDirection_(moveDirection) {}
 
+void TuringMachineState::setCurrentState(int currentState) {
+    currentState_ = currentState;
+}
+
+void TuringMachineState::setCurrentContent(int currentContent) {
+    currentContent_ = currentContent;
+}
+
 int TuringMachineState::getCurrentState() {
     return currentState_;
 }
