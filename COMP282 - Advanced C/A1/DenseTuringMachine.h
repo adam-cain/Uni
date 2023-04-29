@@ -5,7 +5,7 @@
 class DenseTuringMachine : public TuringMachine {
 public:
 	DenseTuringMachine(int x, int y);
-	DenseTuringMachine::DenseTuringMachine(std::vector<TuringMachineState>* states, int maxState, int maxContent);
+	DenseTuringMachine(std::vector<TuringMachineState>* states, int maxState, int maxContent);
 	TuringMachineState* find(int x,int y);
 	void add(TuringMachineState& s);
 	std::vector<TuringMachineState>* getAll();

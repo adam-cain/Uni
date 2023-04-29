@@ -3,6 +3,8 @@
 class MenuSystem {
 public:
 	void menu();
+private:
+	void displayMenu();
 };
 
 #endif /* MENUSYSTEM_H_ */

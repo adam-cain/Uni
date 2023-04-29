@@ -1,5 +1,3 @@
-// TuringMachineState.cpp
-
 #include "TuringMachineState.h"
 
 TuringMachineState::TuringMachineState(int currentState, int currentContent, int nextState, int nextContent, const std::string& moveDirection)
