@@ -40,22 +40,44 @@ void MenuSystem::menu()
 
     cout << "How long should the tape be?" << endl;
     cin >> tapeLength;
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+    while (tapeLength < -1 || tapeLength == 0)
+    {
+        cout << "Enter Option" << endl;
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cin >> tapeLength;
+    }
 
     TuringTape tape(tapeLength);
-
+    if (tapeLength == -1)
+    {
+        tapeLength = numeric_limits<int>::max();
+    }
     while (true)
     {
         displayMenu();
         cin >> option;
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
         if (option == "1")
         {
+            string input;
             int x, y;
             cout << "What is the maximum state and what is the maximum content?" << endl;
-            cin >> x;
-            cin >> y;
+            while (true)
+            {
+                if (cin >> x >> y)
+                {
+                    if ((x > 0 || x == -1) && (y > 0 || y == -1))
+                    {
+                        break;
+                    }
+                }
+                cout << "Enter Option" << endl;
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            }
+
             DenseTuringMachine *dtm = new DenseTuringMachine(x, y);
             tm = dtm;
         }
@@ -67,18 +89,22 @@ void MenuSystem::menu()
         else if (option == "3")
         {
             cout << "What state do you wish to add?" << endl;
-            string line;
-            getline(cin, line);
+            while (true)
+            {
+                int currState, currContent, nextState, nextContent;
+                string direction;
 
-            stringstream ss(line);
-
-            int currState, currContent, nextState, nextContent;
-            string direction;
-
-            ss >> currState >> currContent >> nextState >> nextContent >> direction;
-
-            TuringMachineState newState(currState, currContent, nextState, nextContent, direction);
-            tm->add(newState);
+                if (cin >> currState >> currContent >> nextState >> nextContent >> direction)
+                {
+                    if (currState >= 0 && currContent >= 0 && nextState >= 0 && nextContent >= 0 && (direction == "->" || direction == "<-"))
+                    {
+                        TuringMachineState newState(currState, currContent, nextState, nextContent, direction);
+                        tm->add(newState);
+                        break;
+                    }
+                }
+                cout << "Enter Option" << endl;
+            }
         }
         else if (option == "4")
         {
@@ -103,7 +129,6 @@ void MenuSystem::menu()
             {
                 if (states[i]->getCurrentState() != previousState)
                 {
-                    // New currentState value, increment currentIndex
                     currentIndex++;
                 }
                 previousState = states[i]->getCurrentState();
@@ -122,7 +147,6 @@ void MenuSystem::menu()
             {
                 if (states[i]->getCurrentContent() != previousContent)
                 {
-                    // New currentContent value, increment currentContentIndex
                     currentContentIndex++;
                 }
                 previousContent = states[i]->getCurrentContent();
@@ -142,7 +166,6 @@ void MenuSystem::menu()
             {
                 if (states[i]->getNextState() != previousNextState)
                 {
-                    // New nextState value, increment currentNextStateIndex
                     currentNextStateIndex++;
                 }
                 previousNextState = states[i]->getNextState();
@@ -162,7 +185,6 @@ void MenuSystem::menu()
             {
                 if (states[i]->getNextContent() != previousNextContent)
                 {
-                    // New nextContent value, increment currentIndex
                     currentNextContentIndex++;
                 }
                 previousNextContent = states[i]->getNextContent();
@@ -174,6 +196,19 @@ void MenuSystem::menu()
             int steps;
             cout << "How many steps do you wish to execute?" << endl;
             cin >> steps;
+
+            while (steps < -1 || steps == 0)
+            {
+                cout << "Enter Option" << endl;
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cin >> steps;
+            }
+
+            if (steps == -1)
+            {
+                steps = numeric_limits<int>::max();
+            }
 
             for (int i = 1; i <= steps; ++i)
             {

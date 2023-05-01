@@ -2,7 +2,7 @@
 #define TURINGTAPE_H_
 
 #include <iostream>
-
+#include <vector>
 
 class TuringTape {
 public:
@@ -16,7 +16,7 @@ public:
 	friend std::ostream& operator<<(std::ostream& out,const TuringTape& s);
 
 private:
-    int* tape;
+    std::vector<int> tape;
     int n; 
     int position; 
 	int highestPosition;
