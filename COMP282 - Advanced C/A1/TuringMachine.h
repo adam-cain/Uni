@@ -1,7 +1,6 @@
 #ifndef TURINGMACHINE_H_
 #define TURINGMACHINE_H_
 #include "TuringMachineState.h"
-#include <set>
 #include <vector>
 class TuringMachine {
 public:

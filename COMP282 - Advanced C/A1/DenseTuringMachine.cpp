@@ -4,7 +4,6 @@
 DenseTuringMachine::DenseTuringMachine(int maxState, int maxContent) {
     maxCurrentState_ = maxState;
     maxCurrentContent_ = maxContent;
-    states_.reserve(maxState); // Reserve space for the states_
 }
 
 DenseTuringMachine::DenseTuringMachine(std::vector<TuringMachineState>* states, int maxState, int maxContent) {
@@ -34,7 +33,6 @@ bool DenseTuringMachine::isWithinBounds(int state, int content) {
 }
 
 void DenseTuringMachine::add(TuringMachineState& s) {
-    // Add the given state to the vector of states_
     if(isWithinBounds(s.getCurrentState(), s.getCurrentContent())){
        states_.push_back(s);
     }

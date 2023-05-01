@@ -12,6 +12,8 @@ public:
 
     void setCurrentState(int currentState);
     void setCurrentContent(int currentContent);
+    void setNextState(int nextState);
+    void setNextContent(int nextContent);
 
     int getCurrentState();
     int getCurrentContent();
