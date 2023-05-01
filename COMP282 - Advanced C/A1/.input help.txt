@@ -1,0 +1,61 @@
+set tape length: 50
+
+menu 2
+creates sparse tm:
+50 50
+
+menu 3
+added states
+
+0 0 1000000 1000000 ->
+0 1000000 0 0 <-
+1000000 0 2000000 1000000 ->
+2000000 0 0 0 <-
+
+menu 4
+densify
+
+menu 6
+output tm
+
+### expected output:
+The current state is 0.
+The current position is 0.
+The content of the tape is 0.
+The Turing machine has states: <0 0 1 1 ->> <0 1 0 0 <-> <1 0 2 1 ->> <2 0 0 0 <->
+####
+
+menu 5
+execute tm
+execute 5 steps
+
+menu 6
+output tm
+
+### expected output:
+The current state is 0.
+The current position is -1.
+The content of the tape is 000.
+The Turing machine has states: <0 0 1 1 ->> <0 1 0 0 <-> <1 0 2 1 ->> <2 0 0 0 <->
+####
+
+quit
+
+0 0 1000000 1000000 ->
+0 1000000 0 0 <-
+1000000 0 2000000 1000000 ->
+2000000 0 0 0 <-
+
+
+<0 0 1 1 ->> 
+<0 1 0 0 <-> 
+<1 0 2 1 ->> 
+<2 0 0 0 <->
+
+mine
+<2 0 0 0 <-> 
+<0 1 0 0 <-> 
+<0 0 1 1 ->> 
+<1 0 2 2 ->>
+
+
