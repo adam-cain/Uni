@@ -1,9 +1,19 @@
 #include "DenseTuringMachine.h"
 #include <algorithm>
+#include <limits>
 
 DenseTuringMachine::DenseTuringMachine(int maxState, int maxContent) {
-    maxCurrentState_ = maxState;
-    maxCurrentContent_ = maxContent;
+    if(maxState == -1){
+        maxCurrentState_ = std::numeric_limits<int>::max();
+    }else{
+        maxCurrentState_ = maxState;
+    }
+
+    if(maxContent == -1){
+        maxCurrentContent_ = std::numeric_limits<int>::max();
+    }else{
+        maxCurrentContent_ = maxContent;
+    }
 }
 
 DenseTuringMachine::DenseTuringMachine(std::vector<TuringMachineState>* states, int maxState, int maxContent) {
@@ -14,17 +24,17 @@ DenseTuringMachine::DenseTuringMachine(std::vector<TuringMachineState>* states, 
 }
 
 TuringMachineState* DenseTuringMachine::find(int state, int content) {
-    // Iterate through the states_ and find the one with the given current state and current content
+    
     for (TuringMachineState& tm : states_) {
         if (tm.getCurrentState() == state && tm.getCurrentContent() == content) {
             return &tm;
         }
     }
-    return nullptr; // Return nul lptr if no such state is found
+    return nullptr; 
 }
 
 bool DenseTuringMachine::isWithinBounds(int state, int content) {
-    // Check if state and content are within the upper bounds
+    
     if (state <= maxCurrentState_ && content <= maxCurrentContent_) {
         return true;
     } else {
@@ -39,7 +49,7 @@ void DenseTuringMachine::add(TuringMachineState& s) {
 }
 
 std::vector<TuringMachineState>* DenseTuringMachine::getAll() {
-    // Return a pointer to the vector of all TuringMachinestates_
+    
     return &states_;
 }
 

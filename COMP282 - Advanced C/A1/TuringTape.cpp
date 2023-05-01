@@ -1,54 +1,74 @@
 #include "TuringTape.h"
+#include <limits>
 
-TuringTape::TuringTape(int n) {
-    this->n = n;
-    tape = new int[n];
-    for (int i = 0; i < n; i++) {
-        tape[i] = 0; // Initialize tape with 0
+TuringTape::TuringTape(int n)
+{
+    if (n == -1)
+    {
+        this->n = std::numeric_limits<int>::max();
     }
-    position = 0; // Set initial position to 0
-    highestPosition = 0; // Set highest position to 0
+    else
+    {
+        this->n = n;
+    }
+    tape.push_back(0);
+    position = 0; 
 }
 
-bool TuringTape::moveRight() {
+bool TuringTape::moveRight()
+{
     position++;
-    if(position > highestPosition){
-        highestPosition = position;
+    if(tape.size() >= position  && position < n){
+        tape.push_back(0);
+        return true;
     }
-    if(position > n || position < 0){
-        return false;
-    }
-    return true;
+    return false;
 }
 
-bool TuringTape::moveLeft() {
+bool TuringTape::moveLeft()
+{
     position--;
-    if (position < 0 || position > n) {
+    if (position < 0)
+    {
         return false;
     }
     return true;
 }
 
-int TuringTape::getContent() {
-    if (position >= 0 && position < n) {
+int TuringTape::getContent()
+{
+    if (position >= 0 && position < tape.size())
+    {
         return tape[position];
     }
     return 0;
 }
 
-void TuringTape::setContent(int c) {
-    if (position >= 0 && position < n) {
-        tape[position] = c;
+void TuringTape::setContent(int c)
+{
+    if (position >= 0 && position < n)
+    {
+        if (position >= tape.size())
+        {
+            tape.push_back(c);
+        }
+        else
+        {
+            tape[position] = c;
+        }
     }
 }
 
-int TuringTape::getPosition() {
+int TuringTape::getPosition()
+{
     return position;
 }
 
-std::ostream& operator<<(std::ostream& out, const TuringTape& T) {
-    for (int i = 0; i <= T.highestPosition; i++) {
-        out << T.tape[i]; // Output content of the tape
+std::ostream &operator<<(std::ostream &out, const TuringTape &T)
+{
+    for (int i = 0; i < T.tape.size(); i++)
+    {
+        out << T.tape[i]; 
     }
     return out;
 }
