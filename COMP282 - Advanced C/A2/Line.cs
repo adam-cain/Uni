@@ -6,10 +6,10 @@ public class Line
     private Point endPoint;
     private Color color;
 
-    public Line(Point startPoint, Point endPoint, Color color)
+    public Line(int firstX, int firstY, int secondX, int secondY, Color color)
     {
-        this.StartPoint = startPoint;
-        this.EndPoint = endPoint;
+        this.StartPoint = new Point(firstX, firstY);
+        this.EndPoint = new Point(secondX, secondY);
         this.Color = color;
     }
 

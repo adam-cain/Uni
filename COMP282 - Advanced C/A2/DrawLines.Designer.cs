@@ -66,10 +66,10 @@
             dataGrid.ScrollBars = ScrollBars.Vertical;
             dataGrid.Size = new Size(555, 720);
             dataGrid.TabIndex = 4;
-            dataGrid.CellContentClick += dataGrid_CellContentClick;
+            dataGrid.CellClick += dataGrid_CellClick;
+            dataGrid.RowsAdded += dataGrid_RowsAdded;
             dataGrid.RowValidated += dataGrid_CellEndEdit;
             dataGrid.CellValidating += dataGrid_CellValidating;
-            dataGrid.DefaultValuesNeeded += dataGridView1_DefaultValuesNeeded;
             // 
             // findX
             // 
@@ -107,7 +107,7 @@
             color.Name = "color";
             color.ReadOnly = true;
             color.Width = 110;
-            color.ValueType = typeof(Color);
+            color.Tag = typeof(Color);
             // 
             // removeButton
             // 
@@ -139,6 +139,7 @@
             canvas.TabIndex = 0;
             canvas.TabStop = false;
             canvas.Paint += canvas_Paint;
+            canvas.MouseDown += canvas_MouseDown;
             // 
             // DrawLines
             // 
