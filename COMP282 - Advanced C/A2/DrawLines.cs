@@ -14,9 +14,10 @@ namespace A2
         {
 
         }
-        List<Point> intersections = new List<Point>();
+        private List<Point>? intersections;
         private void findIntersectButton_Click(object sender, EventArgs e)
         {
+            intersections = new List<Point>();
             if (lines != null)
             {
                 for (int i = 0; i < lines.Count - 1; i++)
@@ -197,9 +198,12 @@ namespace A2
                     e.Graphics.DrawLine(pen, line.StartPoint, line.EndPoint); // draw the line
                 }
                 pen.Color = currColor;
-                foreach (Point intersection in intersections)
+                if(intersections != null)
                 {
-                    e.Graphics.DrawEllipse(pen, intersection.X-10, intersection.Y-10, 20, 20);
+                    foreach (Point intersection in intersections)
+                    {
+                        e.Graphics.DrawEllipse(pen, intersection.X - 10, intersection.Y - 10, 20, 20);
+                    }
                 }
             }
         }
