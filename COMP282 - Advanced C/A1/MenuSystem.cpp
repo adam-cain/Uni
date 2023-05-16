@@ -43,7 +43,7 @@ void MenuSystem::menu()
 
     while (tapeLength < -1 || tapeLength == 0)
     {
-        cout << "Enter Option" << endl;
+        cout << "How long should the tape be?" << endl;
         cin.clear();
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
         cin >> tapeLength;
@@ -73,7 +73,7 @@ void MenuSystem::menu()
                         break;
                     }
                 }
-                cout << "Enter Option" << endl;
+                cout << "What is the maximum state and what is the maximum content?" << endl;
                 cin.clear();
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
             }
@@ -103,7 +103,6 @@ void MenuSystem::menu()
                         break;
                     }
                 }
-                cout << "Enter Option" << endl;
             }
         }
         else if (option == "4")
@@ -199,7 +198,7 @@ void MenuSystem::menu()
 
             while (steps < -1 || steps == 0)
             {
-                cout << "Enter Option" << endl;
+                cout << "How many steps do you wish to execute?" << endl;
                 cin.clear();
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 cin >> steps;

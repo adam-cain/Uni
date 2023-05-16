@@ -12,13 +12,17 @@ TuringTape::TuringTape(int n)
         this->n = n;
     }
     tape.push_back(0);
-    position = 0; 
+    position = 0;
+    highestPosition = 0;
 }
 
 bool TuringTape::moveRight()
 {
     position++;
-    if(tape.size() >= position  && position < n){
+    if(position < n && position > highestPosition){
+        highestPosition = position;
+    }
+    if(tape.size() >= position && position < n){
         tape.push_back(0);
         return true;
     }
@@ -28,7 +32,7 @@ bool TuringTape::moveRight()
 bool TuringTape::moveLeft()
 {
     position--;
-    if (position < 0)
+    if (position < n && position >= 0)
     {
         return false;
     }
@@ -66,7 +70,7 @@ int TuringTape::getPosition()
 
 std::ostream &operator<<(std::ostream &out, const TuringTape &T)
 {
-    for (int i = 0; i < T.tape.size(); i++)
+    for (int i = 0; i <= T.highestPosition; i++)
     {
         out << T.tape[i]; 
     }
